@@ -1,38 +1,41 @@
 package cyou.jelle.util;
 
-import java.io.IOException;
+import lombok.SneakyThrows;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
 public class InputProcessor {
-    private InputProcessor(){}
 
+    // regex (?m)^\R: (?m) = 'enable multiline mode', ^ = start of string (already split by multiline), \R = (?>\r\n|\n|\x0b|\f|\r|\x85)
+    public static final String NEWLINE = "\\R";
+    public static final String MULTILINE_MODE = "(?m)";
+    private static final String START_OF_STRING = "^";
+
+    private InputProcessor() {
+    }
+
+    @SneakyThrows // IOException
     public static List<String> loadLines(String filename) {
         var path = Path.of(filename);
-        try {
-            return Files.readAllLines(path);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return Files.readAllLines(path);
     }
 
     public static List<List<String>> loadLinesSplitGroupsOnEmptyString(String filename) {
-        // regex (?m)^\R: (?m) = 'enable multiline mode', ^ = start of string (already split by multiline), \R = (?>\r\n|\n|\x0b|\f|\r|\x85)
-        return InputProcessor.loadLinesSplitGroupsOnEmptyString(filename, "(?m)^\\R");
+        return InputProcessor.loadLinesSplitGroups(filename, MULTILINE_MODE + START_OF_STRING + NEWLINE);
     }
 
-    public static List<List<String>> loadLinesSplitGroupsOnEmptyString(String filename, String regex) {
+    @SneakyThrows // IOException
+    public static List<List<String>> loadLinesSplitGroups(String filename, String splitterRegex) {
         var path = Path.of(filename);
-        try {
-            String input = Files.readString(path);
-            String[] split = input.split(regex);
-            return Arrays.stream(split)
-                    .map(str -> Arrays.stream(str.split("\\R")).toList())
-                    .toList();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+        String input = Files.readString(path);
+        String[] split = input.split(splitterRegex);
+        return Arrays.stream(split)
+                .map(str -> Arrays.stream(str.split(NEWLINE)).toList())
+                .toList();
+
     }
 }
