@@ -1,41 +1,27 @@
 package cyou.jelle;
 
+import cyou.jelle.util.InputProcessor;
 import cyou.jelle.util.Printer;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class Day01 {
-    public static void main(String[] args) throws IOException {
-        try (var lines = Files.lines(Path.of("src/main/resources/Day01.input.txt"))) {
+    public static void main(String[] args) {
+        List<List<String>> groups = InputProcessor.loadLinesSplitGroupsOnEmptyString("src/main/resources/Day01.input.txt");
+        List<Integer> highToLowSums = groups.stream()
+                .map(numberStrings ->
+                        numberStrings.stream()
+                                .map(Integer::parseInt)
+                                .reduce(Integer::sum).orElseThrow())
+                .sorted(Comparator.comparing(Integer::intValue).reversed())
+                .toList();
 
-            var integers = lines
-                    .map(line -> (line.length() > 0) ? Integer.parseInt(line) : Integer.MIN_VALUE)
-                    .toList();
 
-            var sums = new ArrayList<Integer>();
-            int currentSum = 0;
-            for (var value : integers) {
-                if (value == Integer.MIN_VALUE) {
-                    sums.add(currentSum);
-                    currentSum = 0;
-                } else {
-                    currentSum += value;
-                }
-            }
+        Integer maxValue = highToLowSums.get(0);
+        Printer.println("1: " + maxValue);
 
-            Integer maxValue = sums.stream().max(Integer::compareTo).orElseGet(() -> -1);
-            Printer.println(maxValue);
-
-            var maxThree = sums.stream()
-                    .sorted(Comparator.comparing(Integer::intValue).reversed())
-                    .limit(3)
-                    .reduce(Integer::sum).orElseGet(() -> -1);
-           Printer.println(maxThree);
-
-        }
+        var maxThree = highToLowSums.get(0) + highToLowSums.get(1) + highToLowSums.get(2);
+        Printer.println("2: " + maxThree);
     }
 }
