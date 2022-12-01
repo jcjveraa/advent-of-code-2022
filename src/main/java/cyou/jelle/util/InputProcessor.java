@@ -14,7 +14,7 @@ public class InputProcessor {
     // regex (?m)^\R: (?m) = 'enable multiline mode', ^ = start of string (already split by multiline), \R = (?>\r\n|\n|\x0b|\f|\r|\x85)
     public static final String NEWLINE = "\\R";
     public static final String MULTILINE_MODE = "(?m)";
-    private static final String START_OF_STRING = "^";
+    public static final String START_OF_STRING = "^";
 
     private InputProcessor() {
     }
