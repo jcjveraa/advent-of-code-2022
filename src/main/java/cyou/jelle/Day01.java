@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Day01 {
     public static void main(String[] args) {
-        List<List<String>> groups = InputProcessor.loadLinesSplitGroupsOnEmptyString("src/main/resources/Day01.input.txt");
+        List<List<String>> groups = InputProcessor.loadLinesSplitGroupsOnEmptyString("Day01.input.txt");
         List<Integer> highToLowSums = groups.stream()
                 .map(numberStrings ->
                         numberStrings.stream()

@@ -2,10 +2,12 @@ package cyou.jelle.util;
 
 import lombok.SneakyThrows;
 
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class InputProcessor {
 
@@ -19,7 +21,7 @@ public class InputProcessor {
 
     @SneakyThrows // IOException
     public static List<String> loadLines(String filename) {
-        var path = Path.of(filename);
+        var path = getResourcePath(filename);
         return Files.readAllLines(path);
     }
 
@@ -29,7 +31,7 @@ public class InputProcessor {
 
     @SneakyThrows // IOException
     public static List<List<String>> loadLinesSplitGroups(String filename, String splitterRegex) {
-        var path = Path.of(filename);
+        Path path = getResourcePath(filename);
 
         String input = Files.readString(path);
         String[] split = input.split(splitterRegex);
@@ -37,5 +39,11 @@ public class InputProcessor {
                 .map(str -> Arrays.stream(str.split(NEWLINE)).toList())
                 .toList();
 
+    }
+
+    private static Path getResourcePath(String filename) throws URISyntaxException {
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        var uri = Objects.requireNonNull(classloader.getResource(filename)).toURI();
+        return Path.of(uri);
     }
 }
