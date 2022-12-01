@@ -36,7 +36,7 @@ public class InputProcessor {
         String input = Files.readString(path);
         String[] split = input.split(splitterRegex);
         return Arrays.stream(split)
-                .map(str -> Arrays.stream(str.split(NEWLINE)).toList())
+                .map(str -> Arrays.asList(str.split(NEWLINE)))
                 .toList();
 
     }
