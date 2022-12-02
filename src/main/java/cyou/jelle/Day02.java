@@ -17,9 +17,9 @@ public class Day02 {
             counter += myValue(mine) + 1;
             counter += firstMatchPoints(mine, theirs);
 
-            char roundOutcome = mine;
-            counterStar2 += secondMatchPoints(roundOutcome);
-            counterStar2 += myValueSecondStar(theirs, roundOutcome) + 1;
+            char secondStarOutcome = mine;
+            counterStar2 += secondMatchPoints(secondStarOutcome);
+            counterStar2 += myValueSecondStar(theirs, secondStarOutcome) + 1;
         }
 
         Printer.println("1: " + counter);
