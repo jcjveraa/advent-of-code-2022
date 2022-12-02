@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 public class InputProcessor {
 
@@ -23,6 +24,13 @@ public class InputProcessor {
     public static List<String> loadLines(String filename) {
         var path = getResourcePath(filename);
         return Files.readAllLines(path);
+    }
+
+    @SneakyThrows // IOException
+    public static <R> List<R> loadLines(String filename, Function<String,R> mapper) {
+        var path = getResourcePath(filename);
+        List<String> lines = Files.readAllLines(path);
+        return lines.stream().map(mapper).toList();
     }
 
     public static List<List<String>> loadLinesSplitGroupsOnEmptyString(String filename) {

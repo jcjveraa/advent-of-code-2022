@@ -3,17 +3,23 @@ package cyou.jelle;
 import cyou.jelle.util.InputProcessor;
 import cyou.jelle.util.Printer;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
 public class Day02 {
     public static void main(String[] args) {
-        var lines = InputProcessor.loadLines("Day02.input").stream()
-                .map(str -> str.split(" "))
-                .toList();
+        Function<String, List<Character>> stringToCharListMapper =
+                inputLine -> Arrays.stream(inputLine.split(" "))
+                        .map(singleLetterString -> singleLetterString.charAt(0)).toList();
+
+        var charPairs = InputProcessor.loadLines("Day02.input", stringToCharListMapper);
 
         int counter = 0;
         int counterStar2 = 0;
-        for (var line : lines) {
-            char theirs = line[0].charAt(0);
-            char mine = line[1].charAt(0);
+        for (var charPair : charPairs) {
+            var theirs = charPair.get(0);
+            char mine = charPair.get(1);
             counter += myValue(mine) + 1;
             counter += firstMatchPoints(mine, theirs);
 
