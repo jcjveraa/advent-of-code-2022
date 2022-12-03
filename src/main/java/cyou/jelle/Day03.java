@@ -32,7 +32,7 @@ public class Day03 {
             packOne.retainAll(packTwo);
             packOne.retainAll(packThree);
 
-            Character remainingChar = packOne.stream().toList().get(0);
+            Character remainingChar = (Character) packOne.toArray()[0];
             answer += charToValue(remainingChar);
         }
         return answer;
@@ -48,7 +48,7 @@ public class Day03 {
 
             setOne.retainAll(setTwo);
 
-            Character remainingChar = setOne.stream().toList().get(0);
+            Character remainingChar = (Character) setOne.toArray()[0];
             return charToValue(remainingChar);
         };
     }
