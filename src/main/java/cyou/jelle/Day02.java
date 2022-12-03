@@ -18,14 +18,13 @@ public class Day02 {
         int counter = 0;
         int counterStar2 = 0;
         for (var charPair : charPairs) {
-            var theirs = charPair.get(0);
-            char mine = charPair.get(1);
-            counter += myValue(mine) + 1;
-            counter += firstMatchPoints(mine, theirs);
+            char theirs = charPair.get(0);
+            char mineOrSecondStarOutcome = charPair.get(1);
+            counter += myValue(mineOrSecondStarOutcome) + 1;
+            counter += firstMatchPoints(mineOrSecondStarOutcome, theirs);
 
-            char secondStarOutcome = mine;
-            counterStar2 += secondMatchPoints(secondStarOutcome);
-            counterStar2 += myValueSecondStar(theirs, secondStarOutcome) + 1;
+            counterStar2 += secondMatchPoints(mineOrSecondStarOutcome);
+            counterStar2 += myValueSecondStar(theirs, mineOrSecondStarOutcome) + 1;
         }
 
         Printer.println("1: " + counter);
