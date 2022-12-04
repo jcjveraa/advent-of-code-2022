@@ -10,28 +10,33 @@ import java.util.stream.Stream;
 
 public class Day04 {
     public static void main(String[] args) {
-        var starOneAnswer = getInputAsSortedPairsList().filter(Day04::starOneFilter).count();
-        var starTwoAnswer = getInputAsSortedPairsList().filter(Day04::starTwoFilter).count();
+        var starOneAnswer = getInputAsListOfPairs().filter(Day04::starOneFilter).count();
+        var starTwoAnswer = getInputAsListOfPairs().filter(Day04::starTwoFilter).count();
 
         Printer.println("1: " + starOneAnswer);
         Printer.println("2: " + starTwoAnswer);
     }
 
-    private static Stream<List<Integer>> getInputAsSortedPairsList() {
+    private static Stream<List<Integer>> getInputAsListOfPairs() {
         return InputProcessor.loadLines("Day04.input").stream()
                 .map(s -> s.split(","))
                 .map(strings -> {
-                    var one = getIntegerList(strings, 0);
-                    var two = getIntegerList(strings, 1);
-                    // Put the larger pair first
-                    if (one.get(1) - one.get(0) > two.get(1) - two.get(0)) {
-                        one.addAll(two);
-                        return one;
-                    } else {
-                        two.addAll(one);
-                        return two;
-                    }
+                    var firstJobIntPair = getIntegerList(strings, 0);
+                    var secondJobIntPair = getIntegerList(strings, 1);
+                    if (range(firstJobIntPair) > range(secondJobIntPair))
+                        return concatLists(firstJobIntPair, secondJobIntPair);
+                    else
+                        return concatLists(secondJobIntPair, firstJobIntPair);
                 });
+    }
+
+    private static List<Integer> concatLists(List<Integer> first, List<Integer> second) {
+        first.addAll(second);
+        return first;
+    }
+
+    private static int range(List<Integer> integers) {
+        return integers.get(1) - integers.get(0);
     }
 
 
@@ -39,6 +44,7 @@ public class Day04 {
         // full overlap
         return ints.get(0) <= ints.get(2) && ints.get(1) >= ints.get(3);
     }
+
     private static boolean starTwoFilter(List<Integer> ints) {
         return starOneFilter(ints)
                 // Overlap at beginning of shorter list (index 2 twice)
