@@ -7,27 +7,47 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Day05 {
-    private static final List<Deque<Character>> stacks = new ArrayList<>();
-    private static final ArrayList<String> crateInputLines = new ArrayList<>();
+    private static List<Deque<Character>> stacks;
+    private static ArrayList<String> crateInputLines;
+    private static ArrayList<List<Integer>> instructions;
 
     public static void main(String[] args) {
+        initializeStacks();
+        for (var instruction : instructions) {
+            moveCrate(instruction.get(0), instruction.get(1), instruction.get(2));
+        }
+        var starOneAnswer = collectTopCrates();
+
+        initializeStacks();
+        for (var instruction : instructions) {
+            moveMultipleCrate(instruction.get(0), instruction.get(1), instruction.get(2));
+        }
+        var starTwoAnswer = collectTopCrates();
+
+
+        Printer.println("1: " + starOneAnswer);
+        Printer.println("2: " + starTwoAnswer);
+    }
+
+    private static String collectTopCrates() {
+        return stacks.stream().map(deque -> deque.peekLast().toString()).collect(Collectors.joining());
+    }
+
+    private static void initializeStacks() {
+        stacks = new ArrayList<>();
+        crateInputLines = new ArrayList<>();
+        instructions = new ArrayList<>();
         var lineIterator = InputProcessor.loadLines("Day05.input").iterator();
 
         buildStacks(lineIterator);
         fillStacks();
-
-        lineIterator.next(); // skip emty line
+        lineIterator.next(); // skip empty line
         while (lineIterator.hasNext()) {
             var instruction = Arrays.stream(lineIterator.next()
                             .replaceAll("[a-zA-Z ]+", " ").trim().split(" "))
                     .map(Integer::parseInt).toList();
-            moveCrate(instruction.get(0), instruction.get(1), instruction.get(2));
+            instructions.add(instruction);
         }
-
-        var starOneAnswer = stacks.stream().map(deque -> deque.peekLast().toString()).collect(Collectors.joining());
-
-        Printer.println("1: " + starOneAnswer);
-//        Printer.println("2: " + starTwoAnswer);
     }
 
     private static void fillStacks() {
@@ -64,6 +84,16 @@ public class Day05 {
             stacks.get(toStack - 1).addLast(
                     stacks.get(fromStack - 1).removeLast()
             );
+        }
+    }
+
+    private static void moveMultipleCrate(int numCrates, int fromStack, int toStack) {
+        var craneCargo = new ArrayDeque<Character>();
+        for (int i = 0; i < numCrates; i++) {
+            craneCargo.addLast(stacks.get(fromStack - 1).removeLast());
+        }
+        for (int i = 0; i < numCrates; i++) {
+            stacks.get(toStack - 1).addLast(craneCargo.removeLast());
         }
     }
 
