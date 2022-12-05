@@ -29,7 +29,7 @@ public class Day05 {
     }
 
     private static String collectTopCrates() {
-        return stacks.stream().map(deque -> deque.peekLast().toString()).collect(Collectors.joining());
+        return stacks.stream().map(deque -> Objects.requireNonNull(deque.peekLast()).toString()).collect(Collectors.joining());
     }
 
     private static void initializeStacks() {
