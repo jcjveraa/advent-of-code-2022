@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 public class Day05 {
     private static List<Deque<Character>> stacks;
-    private static ArrayList<String> crateInputLines;
     private static ArrayList<List<Integer>> instructions;
 
     public static void main(String[] args) {
@@ -35,12 +34,12 @@ public class Day05 {
 
     private static void initializeStacks() {
         stacks = new ArrayList<>();
-        crateInputLines = new ArrayList<>();
+        ArrayList<String> crateInputLines = new ArrayList<>();
         instructions = new ArrayList<>();
         var lineIterator = InputProcessor.loadLines("Day05.input").iterator();
 
-        buildStacks(lineIterator);
-        fillStacks();
+        buildStacks(lineIterator, crateInputLines);
+        fillStacks(crateInputLines);
         lineIterator.next(); // skip empty line
         while (lineIterator.hasNext()) {
             var instruction = Arrays.stream(lineIterator.next()
@@ -51,7 +50,7 @@ public class Day05 {
         }
     }
 
-    private static void fillStacks() {
+    private static void fillStacks(List<String> crateInputLines) {
         for (int i = crateInputLines.size() - 1; i >= 0; i--) {
             var line = crateInputLines.get(i);
             for (int j = 0; j < stacks.size(); j++) {
@@ -65,7 +64,7 @@ public class Day05 {
         }
     }
 
-    private static void buildStacks(Iterator<String> lineIterator) {
+    private static void buildStacks(Iterator<String> lineIterator, List<String> crateInputLines) {
         while (true) {
             var line = lineIterator.next();
             if (line.charAt(1) == '1') {
