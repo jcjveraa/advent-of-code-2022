@@ -8,17 +8,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class Day04 {
+public class Year2022Day04 {
     public static void main(String[] args) {
-        var starOneAnswer = getInputAsListOfPairs().filter(Day04::starOneFilter).count();
-        var starTwoAnswer = getInputAsListOfPairs().filter(Day04::starTwoFilter).count();
+        var starOneAnswer = getInputAsListOfPairs().filter(Year2022Day04::starOneFilter).count();
+        var starTwoAnswer = getInputAsListOfPairs().filter(Year2022Day04::starTwoFilter).count();
 
         Printer.println("1: " + starOneAnswer);
         Printer.println("2: " + starTwoAnswer);
     }
 
     private static Stream<List<Integer>> getInputAsListOfPairs() {
-        return InputProcessor.loadLines("Day04.input").stream()
+        return InputProcessor.loadLines("Year2022Day04.input").stream()
                 .map(s -> s.split(","))
                 .map(strings -> {
                     var firstJobIntPair = getIntegerList(strings, 0);

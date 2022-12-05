@@ -6,7 +6,7 @@ import cyou.jelle.util.Printer;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Day05 {
+public class Year2022Day05 {
     private static List<Deque<Character>> stacks;
     private static ArrayList<List<Integer>> instructions;
 
@@ -36,7 +36,7 @@ public class Day05 {
         stacks = new ArrayList<>();
         ArrayList<String> crateInputLines = new ArrayList<>();
         instructions = new ArrayList<>();
-        var lineIterator = InputProcessor.loadLines("Day05.input").iterator();
+        var lineIterator = InputProcessor.loadLines("Year2022Day05.input").iterator();
 
         buildStacks(lineIterator, crateInputLines);
         fillStacks(crateInputLines);

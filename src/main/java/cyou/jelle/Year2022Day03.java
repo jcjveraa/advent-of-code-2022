@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-public class Day03 {
+public class Year2022Day03 {
     public static void main(String[] args) {
 
-        var starOneAnswer = InputProcessor.loadLines("Day03.input", starOneMapper())
+        var starOneAnswer = InputProcessor.loadLines("Year2022Day03.input", starOneMapper())
                 .stream().reduce(Integer::sum).orElseThrow();
 
-        var starTwoInput = InputProcessor.loadLines("Day03.input");
+        var starTwoInput = InputProcessor.loadLines("Year2022Day03.input");
         int starTwoAnswer = getStarTwoAnswer(starTwoInput);
 
         Printer.println("1: " + starOneAnswer);

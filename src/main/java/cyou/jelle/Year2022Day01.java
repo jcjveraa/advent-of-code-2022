@@ -6,9 +6,9 @@ import cyou.jelle.util.Printer;
 import java.util.Comparator;
 import java.util.List;
 
-public class Day01 {
+public class Year2022Day01 {
     public static void main(String[] args) {
-        List<List<String>> groups = InputProcessor.loadLinesSplitGroupsOnEmptyString("Day01.input.txt");
+        List<List<String>> groups = InputProcessor.loadLinesSplitGroupsOnEmptyString("Year2022Day01.input");
         List<Integer> highToLowSums = groups.stream()
                 .map(numberStrings ->
                         numberStrings.stream()

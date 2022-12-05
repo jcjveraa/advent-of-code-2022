@@ -7,13 +7,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-public class Day02 {
+public class Year2022Day02 {
     public static void main(String[] args) {
         Function<String, List<Character>> stringToCharListMapper =
                 inputLine -> Arrays.stream(inputLine.split(" "))
                         .map(singleLetterString -> singleLetterString.charAt(0)).toList();
 
-        var charPairs = InputProcessor.loadLines("Day02.input", stringToCharListMapper);
+        var charPairs = InputProcessor.loadLines("Year2022Day02.input", stringToCharListMapper);
 
         int counter = 0;
         int counterStar2 = 0;

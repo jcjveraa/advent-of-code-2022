@@ -6,7 +6,7 @@ class Day03Test {
 
     @org.junit.jupiter.api.Test
     void main() {
-        var mapper = Day03.starOneMapper();
+        var mapper = Year2022Day03.starOneMapper();
         assertEquals(16,mapper.apply("vJrwpWtwJgWrhcsFMMfFFhFp"));
         assertEquals(38,mapper.apply("jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL"));
         assertEquals(42,mapper.apply("PmmdzqPrVvPwwTWBwg"));
