@@ -5,8 +5,6 @@ import cyou.jelle.util.Printer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Year2016Day07 {
     public static void main(String[] args) {
@@ -15,54 +13,27 @@ public class Year2016Day07 {
         int counterStarOne = 0;
         int counterStarTwo = 0;
 
-        final String hypernetSelector = "(\\[.*?])";
+        final String hypernetSelector = "\\[[^]]++]"; //
         final String regularSelector = "([a-z]+)[\\[\\n\\r]+";
-        final Pattern hypernetPattern = Pattern.compile(hypernetSelector, Pattern.MULTILINE);
-        final Pattern regularPattern = Pattern.compile(regularSelector, Pattern.MULTILINE);
         for (var line : lines) {
-            line += "\n";
-            boolean noMatchInBrackets = lineContainsAbba(hypernetPattern, line, true);
-            boolean matchOutsideOfBrackets = lineContainsAbba(regularPattern, line, false);
+            line += "\n"; // to ensure the last section of the line gets selected by regularselector
+            String regular = line.replaceAll(hypernetSelector, "_");
+            String hypernets = line.replaceAll(regularSelector, "_");
 
-            if (noMatchInBrackets && matchOutsideOfBrackets) {
+            boolean matchOutsideOfBrackets = containsAbba(regular);
+            boolean matchInBrackets = containsAbba(hypernets);
+
+            if (!matchInBrackets && matchOutsideOfBrackets) {
                 counterStarOne++;
             }
-
-            String regular = line.replaceAll(hypernetSelector, ".");
-            String hypernets = line.replaceAll(regularSelector, ".");
 
             if (containsValidXYX(regular, hypernets)) {
                 counterStarTwo++;
             }
         }
 
-
         Printer.println("1: " + counterStarOne);
         Printer.println("2: " + counterStarTwo);
-    }
-
-    private static boolean lineContainsAbba(Pattern pattern, String line, boolean baseAssumption) {
-        boolean containsAbba = baseAssumption;
-        Matcher matcher = pattern.matcher(line);
-        while (matcher.find() && containsAbba == baseAssumption) {
-            String matchGroup = matcher.group(0);
-
-            if (containsAbba(matchGroup)) {
-                containsAbba = !baseAssumption;
-            }
-        }
-        return containsAbba;
-    }
-
-
-    private static boolean containsAbba(String in) {
-        for (int i = 4; i < in.length(); i++) {
-            var subStr = in.substring(i - 4, i).toCharArray();
-            if (isABBA(subStr)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private static boolean containsValidXYX(String regular, String hypernet) {
@@ -88,15 +59,24 @@ public class Year2016Day07 {
         return out;
     }
 
+    private static boolean isXYX(char[] chars) {
+        if (chars.length != 3) throw new IllegalArgumentException("Chars length should be 3");
+        return chars[0] == chars[2] && chars[0] != chars[1];
+    }
+
+    private static boolean containsAbba(String in) {
+        for (int i = 4; i < in.length(); i++) {
+            var subStr = in.substring(i - 4, i).toCharArray();
+            if (isABBA(subStr)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private static boolean isABBA(char[] chars) {
         if (chars.length != 4) throw new IllegalArgumentException("Chars length should be 4");
         return chars[0] == chars[3] && chars[1] == chars[2] && chars[0] != chars[1];
-    }
-
-    private static boolean isXYX(char[] chars) {
-        if (chars.length != 3) throw new IllegalArgumentException("Chars length should be 3");
-        return chars[0] == chars[2] && chars[0] != chars[1];
     }
 
 }
