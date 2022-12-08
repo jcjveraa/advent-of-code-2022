@@ -12,6 +12,11 @@ public class Year2022Day08 {
     private static Integer[][] integers;
     private static int width;
     private static int height;
+    private static Integer[] down;
+    private static Integer[] up;
+    private static Integer[] right;
+    private static Integer[] left;
+    private static Integer tree;
 
     public static void main(String[] args) {
         loadData();
@@ -23,32 +28,24 @@ public class Year2022Day08 {
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if (i == 0 || j == 0 || i == integers.length - 1 || j == integers[0].length - 1 || treeSticksOut(i, j)) {
+                setNeighbours(i, j);
+
+                if (i == 0 || j == 0 || i == integers.length - 1 || j == integers[0].length - 1 || treeSticksOut()) {
                     treecounter++;
                 }
 
-                int score = treesVisibleScore(i, j);
+                int score = treesVisibleScore();
                 if (score > maxScore) {
                     maxScore = score;
                 }
             }
         }
-        Printer.println(treecounter);
-        Printer.println(maxScore);
-
-
+        Printer.println("Star 1: " + treecounter);
+        Printer.println("Star 2: " + maxScore);
     }
 
-    private static int treesVisibleScore(int i, int j) {
-        var left = getLeft(i, j);
-        ArrayUtils.reverse(left);
-        var right = getRight(i, j);
-        var up = getUp(i, j);
-        ArrayUtils.reverse(up);
-        var down = getDown(i, j);
-
+    private static int treesVisibleScore() {
         var score = 1;
-        var tree = integers[i][j];
         score *= countVisibleTrees(left, tree);
         score *= countVisibleTrees(right, tree);
         score *= countVisibleTrees(up, tree);
@@ -56,31 +53,30 @@ public class Year2022Day08 {
         return score;
     }
 
+    private static void setNeighbours(int i, int j) {
+        tree = integers[i][j];
+        left = getLeft(i, j);
+        ArrayUtils.reverse(left); // for countVisibleTrees in star 2, star 1 unaffected
+        right = getRight(i, j);
+        up = getUp(i, j);
+        ArrayUtils.reverse(up); // for countVisibleTrees in star 2, star 1 unaffected
+        down = getDown(i, j);
+    }
+
     private static int countVisibleTrees(Integer[] otherTrees, int tree) {
+        if (otherTrees.length == 0) return 0;
+
         int result = 0;
-        for (int i = 0; i < otherTrees.length; i++) {
-            var otherTree = otherTrees[i];
-            if (otherTree >= tree) {
-                result = i+1;
-                break;
-            }
-            if(i == otherTrees.length-1) {
-                result = otherTrees.length;
-            }
+        int otherTree = 0;
+        while (otherTree < tree && result < otherTrees.length) {
+            otherTree = otherTrees[result];
+            result++;
         }
         return result;
     }
 
-    private static boolean treeSticksOut(int i, int j) {
-        var tree = integers[i][j];
-        var left = getLeft(i, j);
-        var right = getRight(i, j);
-        var leftRightVisible = isVisible(tree, left) || isVisible(tree, right);
-
-        var up = getUp(i, j);
-        var down = getDown(i, j);
-        var upDownVisible = isVisible(tree, up) || isVisible(tree, down);
-        return leftRightVisible || upDownVisible;
+    private static boolean treeSticksOut() {
+        return isVisible(tree, left) || isVisible(tree, right) || isVisible(tree, up) || isVisible(tree, down);
     }
 
     private static Integer[] getDown(int i, int j) {
@@ -99,8 +95,8 @@ public class Year2022Day08 {
         return ArrayUtils.subarray(getRow(i), 0, j);
     }
 
-    private static boolean isVisible(Integer tree, Integer[] left) {
-        return Arrays.stream(left).allMatch(otherTree -> otherTree < tree);
+    private static boolean isVisible(Integer tree, Integer[] otherTrees) {
+        return Arrays.stream(otherTrees).allMatch(otherTree -> otherTree < tree);
     }
 
     private static void loadData() {
