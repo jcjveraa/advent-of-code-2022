@@ -7,19 +7,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static cyou.jelle.Year2022Day09.positionsVisitedTimes;
-
 public class Year2022Day09 {
-
-    public static Map<Position, Integer> positionsVisitedTimes;
 
     public static void main(String[] args) {
         var input = InputProcessor.loadLines("Year2022Day09.txt");
 
-        var tailPosition = new Position(0, 0, null);
-        var headPosition = new Position(0, 0, tailPosition);
+        var headPosition = new Position(0, 0);
+        var tailPosition = new Position(0, 0);
 
-        positionsVisitedTimes = new HashMap<>();
+        Map<Position, Integer> positionsVisitedTimes = new HashMap<>();
         positionsVisitedTimes.put(tailPosition, 1);
 
         for (var line : input) {
@@ -28,7 +24,14 @@ public class Year2022Day09 {
             var moves = Integer.parseInt(command[1]);
 
             for (int i = 0; i < moves; i++) {
+                var previousHeadPosition = new Position(headPosition);
                 headPosition.move(direction);
+
+                if (headPosition.distanceTo0Large(tailPosition)) {
+                    tailPosition = previousHeadPosition;
+                    var currentTimeVisited = positionsVisitedTimes.getOrDefault(tailPosition, 0);
+                    positionsVisitedTimes.put(tailPosition, currentTimeVisited + 1);
+                }
             }
         }
 
@@ -43,10 +46,8 @@ public class Year2022Day09 {
 class Position {
     int x, y;
     Position trailer;
-    private Position previousPosition;
 
     public void move(String direction) {
-        previousPosition = new Position(this);
         switch (direction) {
             case "D" -> this.y = this.y - 1;
             case "U" -> this.y = this.y + 1;
@@ -54,34 +55,19 @@ class Position {
             case "R" -> this.x = this.x + 1;
         }
 
-        moveTrailer(previousPosition);
     }
 
-    private void moveTrailer(Position previousPosition) {
-        if (trailer != null && this.distanceTooLarge(trailer)) {
-            trailer.previousPosition = new Position(trailer);
-            trailer.x = previousPosition.x;
-            trailer.y = previousPosition.y;
-            trailer.moveTrailer(previousPosition);
-
-            var currentTimeVisited = positionsVisitedTimes.getOrDefault(trailer, 0);
-            positionsVisitedTimes.put(trailer, currentTimeVisited + 1);
-        }
-    }
-
-    public Position(int x, int y, Position trailer) {
+    public Position(int x, int y) {
         this.x = x;
         this.y = y;
-        this.trailer = trailer;
     }
 
     public Position(Position other) {
         this.x = other.x;
         this.y = other.y;
-        this.trailer = null;
     }
 
-    public boolean distanceTooLarge(Position otherPosition) {
+    public boolean distanceTo0Large(Position otherPosition) {
         var xDiff = Math.abs(this.x - otherPosition.x);
         var yDiff = Math.abs(this.y - otherPosition.y);
         return xDiff > 1 || yDiff > 1;
