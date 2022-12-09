@@ -109,7 +109,7 @@ class Position {
             case "U" -> this.y = this.y + 1;
             case "L" -> this.x = this.x - 1;
             case "R" -> this.x = this.x + 1;
-            default -> throw new IllegalStateException();
+            default -> throw new IllegalArgumentException();
         }
         moveTrailer();
     }
@@ -120,21 +120,27 @@ class Position {
 
         if (yDiff > 1 || xDiff > 1) {
             if (xDiff > 1 && yDiff == 0) {
-                if (this.x > trailer.x) trailer.x++;
-                else trailer.x--;
+                pullTrailerX();
             } else if (yDiff > 1 && xDiff == 0) {
-                if (this.y > trailer.y) trailer.y++;
-                else trailer.y--;
+                pullTrailerY();
             } else { //diagonal
-                if (this.y > trailer.y) trailer.y++;
-                else trailer.y--;
-                if (this.x > trailer.x) trailer.x++;
-                else trailer.x--;
+                pullTrailerY();
+                pullTrailerX();
             }
             updateMoveCounters();
             if (trailer.trailer != null) trailer.moveTrailer();
         }
 
+    }
+
+    private void pullTrailerY() {
+        if (this.y > trailer.y) trailer.y++;
+        else trailer.y--;
+    }
+
+    private void pullTrailerX() {
+        if (this.x > trailer.x) trailer.x++;
+        else trailer.x--;
     }
 
     private void updateMoveCounters() {
@@ -159,19 +165,6 @@ class Position {
 
     private int yDiff(Position otherPosition) {
         return Math.abs(this.y - otherPosition.y);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-//        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Position position = (Position) o;
-        return x == position.x && y == position.y;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y);
     }
 
     @Override
