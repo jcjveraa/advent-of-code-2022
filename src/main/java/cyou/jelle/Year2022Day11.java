@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.IntFunction;
+import java.util.function.LongFunction;
 
 public class Year2022Day11 {
     private static List<Monkey> monkeys = new ArrayList<>();
@@ -35,7 +36,7 @@ public class Year2022Day11 {
             var monkey = monkeys.get(id);
             id++;
             var items = inputLines.next().trim().replace("Starting items: ", "").split(", ");
-            Arrays.stream(items).map(Integer::parseInt).forEach(i -> monkey.items.add(i));
+            Arrays.stream(items).map(Long::parseLong).forEach(i -> monkey.items.add(i));
             var op = inputLines.next().trim().replace("Operation: new = old ", "").split(" ");
             monkey.operation = getOperation(op[0], op[1]);
             var resultHandler = inputLines.next().trim().replace("Test: divisible by ", "");
@@ -63,7 +64,7 @@ public class Year2022Day11 {
 
     }
 
-    private static IntFunction<Integer> getOperation(String operator, String value) {
+    private static LongFunction<Long> getOperation(String operator, String value) {
         boolean isSelfReference = value.equals("old");
         if (operator.equals("+")) {
             if(isSelfReference) return i -> i + i;
@@ -79,9 +80,9 @@ public class Year2022Day11 {
     private static class Monkey {
         int id;
         int inspectionCounter = 0;
-        List<Integer> items = new ArrayList<>();
-        IntFunction<Integer> operation;
-        IntFunction<Boolean> resultHandler;
+        List<Long> items = new ArrayList<>();
+        LongFunction<Long> operation;
+        LongFunction<Boolean> resultHandler;
 
         Monkey ifTrue;
         Monkey ifFalse;
