@@ -28,18 +28,16 @@ public class Year2022Day11 {
 
     private static long getResult(int rounds) {
         for (int i = 0; i < rounds; i++) {
-
             for (var monkey : monkeys) {
                 monkey.inspect();
             }
-
         }
 
-        var sortedMonkeys = monkeys.stream().sorted(Comparator.comparingLong(m -> m.inspectionCounter)).toList();
-        var sortedMonkeysSize = sortedMonkeys.size();
-
-        return sortedMonkeys.get(sortedMonkeysSize - 2).inspectionCounter
-                * sortedMonkeys.get(sortedMonkeysSize - 1).inspectionCounter;
+       return monkeys.stream()
+                .sorted(Comparator.comparingLong(m -> ((Monkey) m).inspectionCounter).reversed())
+                .limit(2)
+                .map(m -> m.inspectionCounter)
+                .reduce(1L, (a,b) -> a*b);
     }
 
     private static List<Monkey> makemeSomeMonkeys(boolean divideByThree) {
