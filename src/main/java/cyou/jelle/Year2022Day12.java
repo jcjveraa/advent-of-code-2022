@@ -26,19 +26,19 @@ public class Year2022Day12 {
         input.toArray(nodes);
         initializeNodes(nodes);
 
-        Printer.println("1: " + star1());
+        Printer.println("1: " + shortestPathSteps());
 
         List<Integer> star2Values = new ArrayList<>();
         for (var node : aNodes) {
             startNode = node;
-            star2Values.add(star1());
+            star2Values.add(shortestPathSteps());
         }
 
         Printer.println("2: " + star2Values.stream().filter(Objects::nonNull).min(Integer::compareTo).orElse(-1));
 
     }
 
-    private static Integer star1() {
+    private static Integer shortestPathSteps() {
         LinkedList<Node> toVisit = new LinkedList<>();
         toVisit.add(startNode);
         Map<Node, Integer> stepsToStart = new HashMap<>();
@@ -121,7 +121,7 @@ public class Year2022Day12 {
 
     private static boolean isReachable(Node thisNode, Node otherNode) {
         if (otherNode.value == 'E') {
-            return thisNode.value == 'z';
+            return thisNode.value == 'z' || thisNode.value == 'y';
         }
 
         return thisNode.value + 1 >= otherNode.value
