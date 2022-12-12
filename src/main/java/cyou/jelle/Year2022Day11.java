@@ -3,10 +3,7 @@ package cyou.jelle;
 import cyou.jelle.util.InputProcessor;
 import cyou.jelle.util.Printer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 
 public class Year2022Day11 {
@@ -42,8 +39,8 @@ public class Year2022Day11 {
 
     private static List<Monkey> makemeSomeMonkeys(boolean divideByThree) {
         divisor = 1L;
-        var inputLines = InputProcessor.loadLines("Year2022Day11.txt").iterator();
-        var inputScanner = InputProcessor.loadLines("Year2022Day11.txt").iterator();
+        var inputLines = getMonkeyIterator();
+        var inputScanner = getMonkeyIterator();
         int id = 0;
         var apes = new ArrayList<Monkey>();
         while (inputScanner.hasNext()) {
@@ -80,6 +77,10 @@ public class Year2022Day11 {
         }
 
         return apes;
+    }
+
+    private static Iterator<String> getMonkeyIterator() {
+        return InputProcessor.loadLines("Year2022Day11.txt").iterator();
     }
 
     private static Function<Long, Long> getOperation(String operator, String value) {
