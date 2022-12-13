@@ -4,7 +4,6 @@ import cyou.jelle.util.InputProcessor;
 import cyou.jelle.util.Printer;
 
 import java.util.*;
-import java.util.function.Function;
 
 public class Year2022Day13 {
     public static void main(String[] args) {
