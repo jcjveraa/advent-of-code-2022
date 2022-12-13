@@ -10,24 +10,23 @@ public class Year2022Day13 {
         var input = InputProcessor.loadLines("Year2022Day13.txt");
         List<List> listPairs = parseInput(input);
 
-        int pairIndexSum = starOne(listPairs);
-
-        Printer.println("1: " + pairIndexSum);
+        int starOne = starOne(listPairs);
+        Printer.println("1: " + starOne);
 
         int starTwo = starTwo(listPairs);
         Printer.println("2: " + starTwo);
     }
 
-    private static int starTwo(List<List> list) {
-        var listPairs = new ArrayList<>(list);
+    private static int starTwo(List<List> listPairs) {
+        var allItems = new ArrayList<>(listPairs);
         List<List<Integer>> six = List.of(List.of(6));
-        listPairs.add(six);
+        allItems.add(six);
         List<List<Integer>> two = List.of(List.of(2));
-        listPairs.add(two);
+        allItems.add(two);
 
-        listPairs.sort(Year2022Day13::compare);
-        var twoIndex = listPairs.indexOf(two) + 1;
-        var sixIndex = listPairs.indexOf(six) + 1;
+        allItems.sort(Year2022Day13::compare);
+        var twoIndex = allItems.indexOf(two) + 1;
+        var sixIndex = allItems.indexOf(six) + 1;
 
         int starTwo = twoIndex * sixIndex;
         return starTwo;
@@ -58,22 +57,27 @@ public class Year2022Day13 {
             var line = iterator.next();
             if (line.isBlank()) {
                 line = iterator.next();
+                Printer.println("");
             }
 
             var list = new ArrayList<>();
+            var topLevelList = list;
             listPairs.add(list);
-            ArrayList<Object> previousListLevel = null;
+
+            var listStack = new ArrayDeque<ArrayList>();
+            listStack.addLast(list);
             var chars = line.toCharArray();
             // i=1 to skip first list opening bracket
             for (int i = 1; i < chars.length; i++) {
                 var c = chars[i];
                 if (c == '[') {
-                    previousListLevel = list;
+                    // previousListLevel = list;
+                    listStack.addLast(list);
                     var newList = new ArrayList<>();
                     list.add(newList);
                     list = newList;
                 } else if (c == ']') {
-                    list = previousListLevel;
+                    list = listStack.removeLast();
                 } else if (c == ',') {
                     continue;
                 } else {
@@ -88,6 +92,8 @@ public class Year2022Day13 {
                     list.add(Integer.parseInt(number));
                 }
             }
+
+            Printer.println(topLevelList);
         }
         return listPairs;
     }
